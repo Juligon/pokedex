@@ -1,50 +1,83 @@
 require("dotenv").config();
 const axios = require("axios");
+const { API_URL } = process.env;
 
+// Función para obtener la lista básica de Pokémon con nombre e imagen y filtrar por nombre o id
 const getPokemons = async (req, res, next) => {
 	try {
-		const { page, name, id } = req.query;
-    const pageSize = 20;
+		const { name, id } = req.query;
+		let apiUrl = API_URL;
 
-    const offset = page ? (page - 1) * pageSize : 0;
+		if (name || id) {
+			apiUrl = `https://pokeapi.co/api/v2/pokemon/${name || id}`;
+		}
 
-    const apiUrl = await axios.get(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pageSize}`);
-    const pokemonResults = apiUrl.data.results;
+		const response = await axios.get(apiUrl);
 
-		let pokemons = await Promise.all(
-			pokemonResults.map(async (pokemon) => {
-				const pokemonDetails = await axios.get(pokemon.url);
-				return {
-					id: pokemonDetails.data.id,
-					name: pokemonDetails.data.name,
-					image: pokemonDetails.data.sprites.front_default,
-					experience: pokemonDetails.data.base_experience,
-					abilities: pokemonDetails.data.abilities.map(
-						(ability) => ability.ability.name
-					),
-					height: pokemonDetails.data.height,
-					weight: pokemonDetails.data.weight,
-				};
-			})
-		);
+		if (response.data.results) {
+			const pokemonResults = response.data.results;
 
-		if (name) {
-			pokemons = pokemons.filter((pokemon) =>
-				pokemon.name.toLowerCase().includes(name.toLowerCase())
+			let pokemons = await Promise.all(
+				pokemonResults.map(async (pokemon) => {
+					const details = await axios.get(pokemon.url);
+					return {
+						id: details.data.id,
+						name: details.data.name,
+						image: details.data.sprites.front_default,
+					};
+				})
 			);
-		}
-		if (id) {
-			pokemons = pokemons.filter((pokemon) => pokemon.id.toString() === id);
-		}
-		if (pokemons.length === 0) {
-			{
-				const error = new Error("Pokemons not found");
-				error.status = 404;
-				throw error;
+
+			if (pokemons.length === 0) {
+				return res
+					.status(404)
+					.json({ message: "No Pokemons found" });
 			}
+
+			res.json(pokemons);
+		} else {
+			const pokemon = {
+				id: response.data.id,
+				name: response.data.name,
+				image: response.data.sprites.front_default,
+			};
+			res.json([pokemon]);
+		}
+	} catch (error) {
+		next(error);
+	}
+};
+
+
+// Función para obtener los detalles completos de un Pokémon específico
+const getPokemonDetails = async (req, res, next) => {
+	try {
+		const { id } = req.params;
+
+		if (!id || isNaN(id)) {
+			const error = new Error("Invalid Pokemon ID");
+			error.status = 400;
+			throw error;
 		}
 
-		res.json(pokemons);
+		const apiUrl = await axios.get(`${API_URL}${id}`);
+		const pokemonDetails = {
+			id: apiUrl.data.id,
+			name: apiUrl.data.name,
+			images: [
+				apiUrl.data.sprites.front_default,
+				apiUrl.data.sprites.front_shiny,
+				apiUrl.data.sprites.back_default,
+				apiUrl.data.sprites.back_shiny,
+			],
+			type: apiUrl.data.types.map((type) => type.type.name),
+			experience: apiUrl.data.base_experience,
+			abilities: apiUrl.data.abilities.map((ability) => ability.ability.name),
+			height: apiUrl.data.height,
+			weight: apiUrl.data.weight,
+		};
+
+		res.json(pokemonDetails);
 	} catch (error) {
 		next(error);
 	}
@@ -52,4 +85,5 @@ const getPokemons = async (req, res, next) => {
 
 module.exports = {
 	getPokemons,
+	getPokemonDetails,
 };
