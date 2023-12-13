@@ -7,7 +7,7 @@ const getPokemons = async (req, res, next) => {
   try {
     console.log("Request to /api/pokemons", req.query);
 
-    let { name, id, page = 1, limit = 200 } = req.query;
+    let { name, id, page = 1, limit = 20 } = req.query; // Cambié el límite a 20 ya que parece que quieres cargar 20 pokémons por página
     let apiUrl = API_URL;
 
     if (name || id) {
@@ -21,11 +21,13 @@ const getPokemons = async (req, res, next) => {
 
       // Obtiene la siguiente página
       let nextPageUrl = response.data.next;
-      while (nextPageUrl && page > 1) {
+      let currentPage = 1;
+
+      while (nextPageUrl && currentPage < page) {
         const nextPageResponse = await axios.get(nextPageUrl);
         pokemonResults.push(...nextPageResponse.data.results);
         nextPageUrl = nextPageResponse.data.next;
-        page--;
+        currentPage++;
       }
 
       // Paginación
@@ -61,7 +63,6 @@ const getPokemons = async (req, res, next) => {
     next(error);
   }
 };
-
 
 
 // Función para obtener los detalles completos de un Pokémon específico
