@@ -4,63 +4,51 @@ const { API_URL } = process.env;
 
 // Función para obtener lista básica de Pokémon con nombre e imagen, filtrar por nombre o id y paginado
 const getPokemons = async (req, res, next) => {
-	try {
-		let { name, id, page = 1, limit = 20 } = req.query;
-		let apiUrl = API_URL;
+  try {
+    let { name, id, page = 1, limit = 20 } = req.query;
+    let apiUrl = API_URL;
 
-		if (name || id) {
-			apiUrl = `https://pokeapi.co/api/v2/pokemon/${name || id}`;
-		}
+    if (name || id) {
+      apiUrl = `https://pokeapi.co/api/v2/pokemon/${name || id}`;
+    }
 
-		const response = await axios.get(apiUrl);
+    const offset = (page - 1) * limit;
+    apiUrl = `${apiUrl}?offset=${offset}&limit=${limit}`;
 
-		if (response.data.results) {
-			const pokemonResults = response.data.results;
+    const response = await axios.get(apiUrl);
 
-			// Obtiene la siguiente página
-			let nextPageUrl = response.data.next;
-			let currentPage = 1;
+    if (response.data.results) {
+      const pokemonResults = response.data.results;
 
-			while (nextPageUrl && currentPage < page) {
-				const nextPageResponse = await axios.get(nextPageUrl);
-				pokemonResults.push(...nextPageResponse.data.results);
-				nextPageUrl = nextPageResponse.data.next;
-				currentPage++;
-			}
+      let pokemons = await Promise.all(
+        pokemonResults.map(async (pokemon) => {
+          const details = await axios.get(pokemon.url);
+          return {
+            id: details.data.id,
+            name: details.data.name,
+            image: details.data.sprites.front_default,
+          };
+        })
+      );
 
-			// Paginación
-			const start = (page - 1) * limit;
-			const end = start + limit;
-			const paginatedResults = pokemonResults.slice(start, end);
+      if (pokemons.length === 0) {
+        return res.status(404).json({ message: "No Pokemons found" });
+      }
 
-			let pokemons = await Promise.all(
-				paginatedResults.map(async (pokemon) => {
-					const details = await axios.get(pokemon.url);
-					return {
-						id: details.data.id,
-						name: details.data.name,
-						image: details.data.sprites.front_default,
-					};
-				})
-			);
-
-			if (pokemons.length === 0) {
-				return res.status(404).json({ message: "No Pokemons found" });
-			}
-
-			res.json(pokemons);
-		} else {
-			const pokemon = {
-				id: response.data.id,
-				name: response.data.name,
-				image: response.data.sprites.front_default,
-			};
-			res.json([pokemon]);
-		}
-	} catch (error) {
-		next(error);
-	}
+      res.json(pokemons);
+    } else {
+      const pokemon = {
+        id: response.data.id,
+        name: response.data.name,
+        image: response.data.sprites.front_default,
+      };
+      res.json([pokemon]);
+    }
+  } catch (error) {
+    next(error);
+  }
 };
+
 
 // Función para obtener los detalles completos de un Pokémon específico
 const getPokemonDetails = async (req, res, next) => {
