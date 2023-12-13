@@ -6,6 +6,8 @@ const { API_URL } = process.env;
 const getPokemons = async (req, res, next) => {
 	try {
 		let { name, id, page = 1, limit = 20 } = req.query;
+		console.log('Current Page:', page);
+
 		let apiUrl = API_URL;
 
 		if (name || id) {
