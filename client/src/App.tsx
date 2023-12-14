@@ -2,6 +2,7 @@ import { Redirect, Route } from "react-router-dom";
 import {
 	IonApp,
 	IonIcon,
+	IonImg,
 	IonLabel,
 	IonRouterOutlet,
 	IonTabBar,
@@ -33,6 +34,8 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
+import Logo from "./assets/logo2.svg";
+
 setupIonicReact();
 
 const App: React.FC = () => (
@@ -50,8 +53,9 @@ const App: React.FC = () => (
 				</IonRouterOutlet>
 				<IonTabBar slot="bottom">
 					<IonTabButton tab="allPokemons" href="/">
-						<IonIcon aria-hidden="true" icon={square} size="small" />
-						<IonLabel>Pokedex</IonLabel>
+						{/* <IonIcon aria-hidden="true" icon={square} size="small" /> */}
+						<IonImg aria-hidden="true" src={Logo} style={{height: "35px", color: "#fff"}}/>
+						<IonLabel style={{color: "#fff"}}>Pokedex</IonLabel>
 					</IonTabButton>
 				</IonTabBar>
 			</IonTabs>
