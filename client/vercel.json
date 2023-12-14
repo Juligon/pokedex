@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "build/**/*.js",
+      "use": "@now/static-builder",
+      "config": { "distDir": "build" }
+    }
+  ]
+}
