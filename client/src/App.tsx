@@ -11,8 +11,8 @@ import {
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { ellipse, square, triangle } from "ionicons/icons";
-import AllPokemons from "./pages/Home/Home";
-import PokemonDetail from "./pages/PokemonDetail/PokemonDetail";
+import Home from "./pages/Home/Home";
+import Detail from "./pages/Detail/Detail";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -41,10 +41,10 @@ const App: React.FC = () => (
 			<IonTabs>
 				<IonRouterOutlet placeholder={undefined}>
 					<Route exact path="/">
-						<AllPokemons />
+						<Home />
 					</Route>
 					<Route exact path="/pokemons/:id">
-						<PokemonDetail />
+						<Detail />
 					</Route>
 					<Redirect to="/" />
 				</IonRouterOutlet>
@@ -52,10 +52,6 @@ const App: React.FC = () => (
 					<IonTabButton tab="allPokemons" href="/">
 						<IonIcon aria-hidden="true" icon={square} size="small" />
 						<IonLabel>Pokedex</IonLabel>
-					</IonTabButton>
-					<IonTabButton tab="pokemonDetail" href="/pokemons/:id">
-						<IonIcon aria-hidden="true" icon={ellipse} size="small" />
-						<IonLabel>Pokemon</IonLabel>
 					</IonTabButton>
 				</IonTabBar>
 			</IonTabs>

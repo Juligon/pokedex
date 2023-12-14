@@ -11,9 +11,11 @@ import {
   IonButton,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonRouterLink,
 } from "@ionic/react";
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 import "./PokemonsList.css";
+
 
 interface Pokemon {
   id: number;
@@ -21,14 +23,20 @@ interface Pokemon {
   image: string;
 }
 
-const PokemonList: React.FC = () => {
+interface PokemonListProps {
+  search: string;
+}
+
+const PokemonList: React.FC<PokemonListProps> = ({ search }) => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [disableInfiniteScroll, setDisableInfiniteScroll] = useState(false);
 
-  const fetchPokemons = async (page: number) => {
+  const fetchPokemons = async (page: number, search: string = "") => {
     try {
-      const response = await fetch(`${SERVER_URL}?page=${page}`);
+      const apiUrl = `${SERVER_URL}?page=${page}&name=${search}`;
+      const response = await fetch(apiUrl);
+
       if (!response.ok) {
         throw new Error("Failed to fetch Pokemon list");
       }
@@ -38,9 +46,9 @@ const PokemonList: React.FC = () => {
       if (page === 1 || page === currentPage + 1) {
         setPokemons((prevPokemons) => {
           if (page === 1) {
-            return data; 
+            return data;
           } else {
-            return [...prevPokemons, ...data]; 
+            return [...prevPokemons, ...data];
           }
         });
 
@@ -56,9 +64,9 @@ const PokemonList: React.FC = () => {
   const loadMoreData = (event: CustomEvent<void>) => {
     setTimeout(() => {
       const nextPage = currentPage + 1;
-      fetchPokemons(nextPage);
+      fetchPokemons(nextPage, search);
       setCurrentPage(nextPage);
-			//@ts-ignore
+      //@ts-ignore
       event.target.complete();
 
       if (pokemons.length >= 200) {
@@ -72,8 +80,8 @@ const PokemonList: React.FC = () => {
     const initialPage = parseInt(urlParams.get("page") || "1", 10);
     setCurrentPage(initialPage);
 
-    fetchPokemons(initialPage);
-  }, []);
+    fetchPokemons(initialPage, search);
+  }, [search]);
 
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -85,6 +93,7 @@ const PokemonList: React.FC = () => {
         <IonRow>
           {pokemons.map((pokemon) => (
             <IonCol size="4" key={pokemon.id}>
+              <IonRouterLink routerLink={`/pokemons/${pokemon.id}`}>
               <IonCard>
                 <img
                   src={pokemon.image}
@@ -98,6 +107,7 @@ const PokemonList: React.FC = () => {
                   </IonCardTitle>
                 </IonCardHeader>
               </IonCard>
+              </IonRouterLink>
             </IonCol>
           ))}
         </IonRow>
