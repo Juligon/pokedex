@@ -3,6 +3,12 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "react-vite"
+  "type": "react-vite",
+  "outputTargets": [
+    {
+      "type": "www",
+      "dir": "build"
+    }
+  ]
   
 }
