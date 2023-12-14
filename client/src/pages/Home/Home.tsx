@@ -6,9 +6,11 @@ import {
 	IonTitle,
 	IonToolbar,
 	IonSearchbar,
+	IonImg,
 } from "@ionic/react";
 import "./Home.css";
 import PokemonsList from "../../components/PokemonsList/PokemonsList";
+import Logo from "../../assets/logo.png";
 
 const Home: React.FC = () => {
 	const [searchText, setSearchText] = useState("");
@@ -21,7 +23,8 @@ const Home: React.FC = () => {
 		<IonPage>
 			<IonHeader>
 				<IonToolbar>
-					<IonTitle>Pokedex</IonTitle>
+					<IonImg slot="start" src={Logo} style={{ height: "35px", paddingTop: "5px", paddingLeft: "10px"}} />
+					<IonTitle style={{paddingTop: "5px"}}>Home</IonTitle>
 				</IonToolbar>
 				<IonToolbar>
 					<IonSearchbar
