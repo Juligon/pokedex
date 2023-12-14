@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "name": "proyecto",
+  "builds": [
+    {
+      "src": "/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "outputDirectory": "dist/repo"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(./.(css|js|jpg|png|svg|ico|woff|woff2))$",
+      "dest": "/dist/repo/$1"
+    },
+    {
+      "src": "/(assets/.)",
+      "dest": "/dist/repo/$1"
+    },
+    {
+      "src": "/.*",
+      "dest": "/dist/repo/www/index.html"
+    }
+  ]
+}
