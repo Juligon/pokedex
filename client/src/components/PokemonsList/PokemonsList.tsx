@@ -98,7 +98,7 @@ const PokemonList: React.FC<PokemonListProps> = ({ search }) => {
                 <img
                   src={pokemon.image}
                   alt={pokemon.name}
-                  style={{ display: "block", margin: "0 auto" }}
+                  style={{ display: "block", margin: "0 auto", paddingTop: "10px" }}
                 />
                 <IonCardHeader>
                   <IonCardSubtitle>ID: {pokemon.id}</IonCardSubtitle>
