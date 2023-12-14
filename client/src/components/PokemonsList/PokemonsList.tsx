@@ -92,7 +92,7 @@ const PokemonList: React.FC<PokemonListProps> = ({ search }) => {
       <IonGrid>
         <IonRow>
           {pokemons.map((pokemon) => (
-            <IonCol size="4" key={pokemon.id}>
+            <IonCol size="6" key={pokemon.id}>
               <IonRouterLink routerLink={`/pokemons/${pokemon.id}`}>
               <IonCard>
                 <img
