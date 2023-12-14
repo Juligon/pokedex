@@ -9,7 +9,7 @@ const getPokemons = async (req, res, next) => {
     let apiUrl = API_URL;
 
     if (name || id) {
-      apiUrl = `https://pokeapi.co/api/v2/pokemon/${name || id}`;
+      apiUrl = `https://pokeapi.co/api/v2/pokemon/${name ? name.toLowerCase() : id}`;
     }
 
     const offset = (page - 1) * limit;
@@ -31,6 +31,12 @@ const getPokemons = async (req, res, next) => {
         })
       );
 
+      const lowerCaseSearchName = name ? name.toLowerCase() : name;
+
+      pokemons = pokemons.filter(pokemon =>
+        pokemon.name.toLowerCase().includes(lowerCaseSearchName)
+      );
+
       if (pokemons.length === 0) {
         return res.status(404).json({ message: "No Pokemons found" });
       }
@@ -42,12 +48,14 @@ const getPokemons = async (req, res, next) => {
         name: response.data.name,
         image: response.data.sprites.front_default,
       };
+
       res.json([pokemon]);
     }
   } catch (error) {
     next(error);
   }
 };
+
 
 
 // Función para obtener los detalles completos de un Pokémon específico
@@ -71,7 +79,7 @@ const getPokemonDetails = async (req, res, next) => {
 				apiUrl.data.sprites.back_default,
 				apiUrl.data.sprites.back_shiny,
 			],
-			type: apiUrl.data.types.map((type) => type.type.name),
+      type: apiUrl.data.types.map((type) => type.type.name),
 			experience: apiUrl.data.base_experience,
 			abilities: apiUrl.data.abilities.map((ability) => ability.ability.name),
 			height: apiUrl.data.height,
