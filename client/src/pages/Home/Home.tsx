@@ -32,11 +32,6 @@ const Home: React.FC = () => {
 				</IonToolbar>
 			</IonHeader>
 			<IonContent fullscreen>
-				<IonHeader collapse="condense">
-					<IonToolbar>
-						<IonTitle size="large">Pokedex</IonTitle>
-					</IonToolbar>
-				</IonHeader>
 				<PokemonsList search={searchText} />
 			</IonContent>
 		</IonPage>

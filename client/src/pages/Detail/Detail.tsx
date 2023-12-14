@@ -78,29 +78,36 @@ const Detail: React.FC<DetailProps> = ({ match, history }) => {
 				{pokemonDetail && (
 					<IonCard>
 						<IonCardContent>
-            <Carousel>
-                {pokemonDetail.images.map((image, index) => (
-                  <IonItem key={index}>
-                    <IonImg
-                      src={image}
-                      style={{ display: "block", margin: "0 auto", paddingBottom: "25px"}}
-                    />
-                  </IonItem>
-                ))}
-              </Carousel>
+							<Carousel className="carousel">
+								{pokemonDetail.images.map((image, index) => (
+									<IonItem key={index}>
+										<IonImg
+											src={image}
+											style={{
+												display: "block",
+												margin: "0 auto",
+												paddingBottom: "25px",
+											}}
+										/>
+									</IonItem>
+								))}
+							</Carousel>
 							<IonList inset={true}>
 								<IonItem>
 									<IonLabel>ID: {pokemonDetail.id}</IonLabel>
 								</IonItem>
 								<IonItem>
-									<IonLabel>Type: {capitalizeFirstLetter(pokemonDetail.type.join(", "))}</IonLabel>
+									<IonLabel>
+										Type: {capitalizeFirstLetter(pokemonDetail.type.join(", "))}
+									</IonLabel>
 								</IonItem>
 								<IonItem>
 									<IonLabel>Experience: {pokemonDetail.experience}</IonLabel>
 								</IonItem>
 								<IonItem>
 									<IonLabel>
-										Abilities: {capitalizeFirstLetter(pokemonDetail.abilities.join(", "))}
+										Abilities:{" "}
+										{capitalizeFirstLetter(pokemonDetail.abilities.join(", "))}
 									</IonLabel>
 								</IonItem>
 								<IonItem>

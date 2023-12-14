@@ -1,0 +1,17 @@
+.carousel.carousel-slider .control-arrow {
+	/* top: 0; */
+	color: #fff;
+	font-size: 26px;
+	bottom: 0;
+	margin-top: 25px;
+	padding: 5px;
+	padding-bottom: 10px;
+}
+
+.carousel .carousel-status {
+	padding: 0;
+}
+
+.carousel .thumbs-wrapper {
+	margin: 0 auto;
+}
