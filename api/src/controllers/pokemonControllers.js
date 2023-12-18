@@ -6,16 +6,23 @@ const { API_URL } = process.env;
 const getPokemons = async (req, res, next) => {
   try {
     let { name, id, page = 1, limit = 20 } = req.query;
-    let apiUrl = API_URL;
+    let apiUrl;
 
     if (name || id) {
-      apiUrl = `https://pokeapi.co/api/v2/pokemon/${name ? name.toLowerCase() : id}`;
+      apiUrl = `${API_URL}${name ? name.toLowerCase() : id}`;
+    } else {
+      apiUrl = API_URL;
     }
 
     const offset = (page - 1) * limit;
-    apiUrl = `${apiUrl}?offset=${offset}&limit=${limit}`;
+    const params = new URLSearchParams({
+      offset: offset,
+      limit: limit
+    });
 
-    const response = await axios.get(apiUrl);
+    const urlWithParams = `${apiUrl}?${params}`;
+
+    const response = await axios.get(urlWithParams);
 
     if (response.data.results) {
       const pokemonResults = response.data.results;
@@ -26,17 +33,18 @@ const getPokemons = async (req, res, next) => {
           return {
             id: details.data.id,
             name: details.data.name,
-            image: details.data.sprites.other['official-artwork'].front_default, 
-            type: details.data.types.map((type) => type.type.name), 
+            image: details.data.sprites.other['official-artwork'].front_default,
+            types: details.data.types.map((type) => type.type.name),
           };
         })
       );
 
-      const lowerCaseSearchName = name ? name.toLowerCase() : name;
-
-      pokemons = pokemons.filter(pokemon =>
-        pokemon.name.toLowerCase().includes(lowerCaseSearchName)
-      );
+      if (name || id) {
+        const lowerCaseSearchName = name ? name.toLowerCase() : name;
+        pokemons = pokemons.filter(pokemon =>
+          pokemon.name.toLowerCase().includes(lowerCaseSearchName)
+        );
+      }
 
       if (pokemons.length === 0) {
         return res.status(404).json({ message: "No Pokemons found" });
@@ -48,7 +56,7 @@ const getPokemons = async (req, res, next) => {
         id: response.data.id,
         name: response.data.name,
         image: response.data.sprites.front_default,
-        type: response.data.types.map((type) => type.type.name),
+        types: response.data.types.map((type) => type.type.name),
       };
 
       res.json([pokemon]);
@@ -57,6 +65,7 @@ const getPokemons = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // Función para obtener los detalles completos de un Pokémon específico
 const getPokemonDetails = async (req, res, next) => {
@@ -79,7 +88,7 @@ const getPokemonDetails = async (req, res, next) => {
 				apiUrl.data.sprites.back_default,
 				apiUrl.data.sprites.back_shiny,
 			],
-      type: apiUrl.data.types.map((type) => type.type.name),
+			type: apiUrl.data.types.map((type) => type.type.name),
 			experience: apiUrl.data.base_experience,
 			abilities: apiUrl.data.abilities.map((ability) => ability.ability.name),
 			height: apiUrl.data.height,
