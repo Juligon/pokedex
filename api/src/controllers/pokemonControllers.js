@@ -26,7 +26,8 @@ const getPokemons = async (req, res, next) => {
           return {
             id: details.data.id,
             name: details.data.name,
-            image: details.data.sprites.front_default,
+            image: details.data.sprites.other['official-artwork'].front_default, 
+            type: details.data.types.map((type) => type.type.name), 
           };
         })
       );
@@ -47,6 +48,7 @@ const getPokemons = async (req, res, next) => {
         id: response.data.id,
         name: response.data.name,
         image: response.data.sprites.front_default,
+        type: response.data.types.map((type) => type.type.name),
       };
 
       res.json([pokemon]);
@@ -55,8 +57,6 @@ const getPokemons = async (req, res, next) => {
     next(error);
   }
 };
-
-
 
 // Función para obtener los detalles completos de un Pokémon específico
 const getPokemonDetails = async (req, res, next) => {
