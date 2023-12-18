@@ -111,10 +111,10 @@ const Detail: React.FC<DetailProps> = ({ match, history }) => {
 									</IonLabel>
 								</IonItem>
 								<IonItem>
-									<IonLabel>Height: {pokemonDetail.height} m</IonLabel>
+									<IonLabel>Height: {pokemonDetail.height / 10} m</IonLabel>
 								</IonItem>
 								<IonItem>
-									<IonLabel>Weight: {pokemonDetail.weight} kg</IonLabel>
+									<IonLabel>Weight: {pokemonDetail.weight / 10} kg</IonLabel>
 								</IonItem>
 							</IonList>
 						</IonCardContent>

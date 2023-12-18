@@ -2,3 +2,85 @@
   display: flex;
   justify-content: center;
 }
+
+/* Color types */
+
+.fire{
+  color:#F57D31
+}
+
+.normal{
+  color: #AAA67F
+}
+
+.fighting{
+  color: #C12239
+}
+
+.flying{
+  color: #A891EC
+}
+
+.ground{
+  color: #DEC16B
+}
+
+.poison{
+  color: #A43E9E
+}
+
+.rock{
+  color: #B69E31
+}
+
+.bug{
+  color: #A7B723
+}
+
+.ghost{
+  color: #70559B
+} 
+
+.steel{
+  color: #B7B9D0
+}
+
+.water{
+  color: #6493EB
+}
+
+.grass{
+  color: #74CB48
+}
+
+.electric{
+  color: #F9CF30
+}
+
+.psychic{
+  color: #FB5584
+}
+
+.ice{
+  color: #9AD6DF
+} 
+
+.dragon{
+  color: #7037FF
+}
+
+.dark{
+  color: #75574C
+}
+
+.fairy{
+  color: #E69EAC
+}
+
+.unknown{
+  color: #A9A7AA
+}
+
+.shadow{
+  color: #453F3A
+}
