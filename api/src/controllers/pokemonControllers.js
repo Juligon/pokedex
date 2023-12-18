@@ -83,10 +83,8 @@ const getPokemonDetails = async (req, res, next) => {
 			id: apiUrl.data.id,
 			name: apiUrl.data.name,
 			images: [
-				apiUrl.data.sprites.front_default,
-				apiUrl.data.sprites.front_shiny,
-				apiUrl.data.sprites.back_default,
-				apiUrl.data.sprites.back_shiny,
+				apiUrl.data.sprites.versions["generation-v"]["black-white"].animated.front_default,
+				apiUrl.data.sprites.versions["generation-v"]["black-white"].animated.back_default,
 			],
 			type: apiUrl.data.types.map((type) => type.type.name),
 			experience: apiUrl.data.base_experience,
