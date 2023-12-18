@@ -86,7 +86,8 @@ const Detail: React.FC<DetailProps> = ({ match, history }) => {
 											style={{
 												display: "block",
 												margin: "0 auto",
-												paddingBottom: "25px",
+												height: "100%",
+												paddingBottom: "50px",
 											}}
 										/>
 									</IonItem>

@@ -145,7 +145,6 @@ const PokemonList: React.FC<PokemonListProps> = ({ search }) => {
 										{/* @ts-ignore */}
 										{pokemon.types.map((type, index) => (
 											<IonChip
-												slot="start"
 												key={index}
 												style={{ backgroundColor: mapTypeToColor(type) }}
 											>
