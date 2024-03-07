@@ -1,4 +1,4 @@
-# Pokedex App
+# Pokedex
 
 Welcome to the Pokedex App! This is a Pokemon application that allows users to view, filter, and get details about Pokemon. The project is developed with Node.js and Express in the backend and Ionic React in the frontend.
 
