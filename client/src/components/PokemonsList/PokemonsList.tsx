@@ -8,7 +8,6 @@ import {
 	IonGrid,
 	IonRow,
 	IonCol,
-	IonButton,
 	IonInfiniteScroll,
 	IonInfiniteScrollContent,
 	IonRouterLink,
@@ -148,7 +147,9 @@ const PokemonList: React.FC<PokemonListProps> = ({ search }) => {
 												key={index}
 												style={{ backgroundColor: mapTypeToColor(type) }}
 											>
-												<IonLabel style={{ color: "white", fontSize: "11px" }}>{type}</IonLabel>
+												<IonLabel style={{ color: "white", fontSize: "11px" }}>
+													{type}
+												</IonLabel>
 											</IonChip>
 										))}
 									</IonCardContent>
