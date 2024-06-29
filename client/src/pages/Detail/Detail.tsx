@@ -18,7 +18,7 @@ import {
 } from "@ionic/react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import "./Detail.css";
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface DetailProps extends RouteComponentProps<{ id: string }> {}
 
@@ -34,20 +34,30 @@ interface PokemonDetail {
 }
 
 const Detail: React.FC<DetailProps> = ({ match, history }) => {
-	const [pokemonDetail, setPokemonDetail] = useState<PokemonDetail | null>(
-		null
-	);
+	const [pokemonDetail, setPokemonDetail] = useState<PokemonDetail | null>(null);
 
 	useEffect(() => {
 		const fetchPokemonDetail = async () => {
 			try {
-				const response = await fetch(`${SERVER_URL}${match.params.id}`);
+				const response = await fetch(`${API_URL}/${match.params.id}`);
 				if (!response.ok) {
 					throw new Error("Failed to fetch Pokemon details");
 				}
 
-				const data: PokemonDetail = await response.json();
-				setPokemonDetail(data);
+				const data = await response.json();
+				const formattedDetail: PokemonDetail = {
+					id: data.id,
+					name: data.name,
+					//@ts-ignore
+					images: Object.values(data.sprites).filter(img => typeof img === 'string'),
+					type: data.types.map((t: any) => t.type.name),
+					experience: data.base_experience,
+					abilities: data.abilities.map((a: any) => a.ability.name),
+					height: data.height,
+					weight: data.weight,
+				};
+
+				setPokemonDetail(formattedDetail);
 			} catch (error) {
 				console.error("Error fetching Pokemon details:", error);
 			}
@@ -127,3 +137,4 @@ const Detail: React.FC<DetailProps> = ({ match, history }) => {
 };
 
 export default withRouter(Detail);
+

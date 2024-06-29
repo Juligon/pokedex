@@ -15,14 +15,14 @@ import {
 	IonChip,
 	IonLabel,
 } from "@ionic/react";
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 import "./PokemonsList.css";
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface Pokemon {
 	id: number;
 	name: string;
 	image: string;
-	types: string;
+	types: string[];
 }
 
 interface PokemonListProps {
@@ -36,7 +36,9 @@ const PokemonList: React.FC<PokemonListProps> = ({ search }) => {
 
 	const fetchPokemons = async (page: number, search: string = "") => {
 		try {
-			const apiUrl = `${SERVER_URL}?page=${page}&name=${search}`;
+			const limit = 20;
+			const offset = (page - 1) * limit;
+			const apiUrl = `${API_URL}?limit=${limit}&offset=${offset}`;
 			const response = await fetch(apiUrl);
 
 			if (!response.ok) {
@@ -44,13 +46,25 @@ const PokemonList: React.FC<PokemonListProps> = ({ search }) => {
 			}
 
 			const data = await response.json();
+			const fetchedPokemons = await Promise.all(
+				data.results.map(async (p: any) => {
+					const res = await fetch(p.url);
+					const details = await res.json();
+					return {
+						id: details.id,
+						name: details.name,
+						image: details.sprites.other['official-artwork'].front_default,
+						types: details.types.map((t: any) => t.type.name),
+					};
+				})
+			);
 
 			if (page === 1 || page === currentPage + 1) {
 				setPokemons((prevPokemons) => {
 					if (page === 1) {
-						return data;
+						return fetchedPokemons;
 					} else {
-						return [...prevPokemons, ...data];
+						return [...prevPokemons, ...fetchedPokemons];
 					}
 				});
 
@@ -141,7 +155,6 @@ const PokemonList: React.FC<PokemonListProps> = ({ search }) => {
 										</IonCardTitle>
 									</IonCardHeader>
 									<IonCardContent>
-										{/* @ts-ignore */}
 										{pokemon.types.map((type, index) => (
 											<IonChip
 												key={index}
