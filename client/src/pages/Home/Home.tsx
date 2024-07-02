@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	IonContent,
 	IonHeader,
@@ -8,17 +8,26 @@ import {
 	IonSearchbar,
 	IonImg,
 } from "@ionic/react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import "./Home.css";
-import PokemonsList from "../../components/PokemonsList/PokemonsList";
+import PokemonList from "../../components/PokemonsList/PokemonsList";
 import Logo from "../../assets/logo.png";
 
 const Home: React.FC = () => {
 	const [searchText, setSearchText] = useState("");
 	const history = useHistory();
+	const location = useLocation();
+
+	useEffect(() => {
+		const urlParams = new URLSearchParams(location.search);
+		const searchParam = urlParams.get("search") || "";
+		setSearchText(searchParam);
+	}, [location]);
 
 	const handleSearch = (e: CustomEvent) => {
-		setSearchText(e.detail.value);
+		const value = e.detail.value;
+		setSearchText(value);
+		history.push(`/?search=${value}`);
 	};
 
 	const navigateToHomePage = () => {
@@ -56,10 +65,12 @@ const Home: React.FC = () => {
 				</IonToolbar>
 			</IonHeader>
 			<IonContent fullscreen>
-				<PokemonsList search={searchText} />
+				<PokemonList search={searchText} />
 			</IonContent>
 		</IonPage>
 	);
 };
 
 export default Home;
+
+
