@@ -37,7 +37,7 @@ const capitalizeFirstLetter = (string: string) => {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const Detail: React.FC<DetailProps> = ({ match, history }) => {
+const Detail: React.FC<DetailProps> = ({ match, location, history }) => {
 	const [pokemonDetail, setPokemonDetail] = useState<PokemonDetail | null>(null);
 
 	useEffect(() => {

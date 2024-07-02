@@ -1,14 +1,14 @@
 import { Redirect, Route } from "react-router-dom";
 import {
-	IonApp,
-	IonIcon,
-	IonImg,
-	IonLabel,
-	IonRouterOutlet,
-	IonTabBar,
-	IonTabButton,
-	IonTabs,
-	setupIonicReact,
+    IonApp,
+    IonIcon,
+    IonImg,
+    IonLabel,
+    IonRouterOutlet,
+    IonTabBar,
+    IonTabButton,
+    IonTabs,
+    setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { ellipse, square, triangle } from "ionicons/icons";
@@ -39,32 +39,28 @@ import Logo from "./assets/logo2.png";
 setupIonicReact();
 
 const App: React.FC = () => (
-	<IonApp>
-		<IonReactRouter>
-			<IonTabs>
-				<IonRouterOutlet placeholder={undefined}>
-					<Route exact path="/">
-						<Home />
-					</Route>
-					<Route exact path="/pokemons/:id">
-						<Detail />
-					</Route>
-					<Redirect to="/" />
-				</IonRouterOutlet>
-				<IonTabBar slot="bottom">
-					<IonTabButton tab="allPokemons" href="/">
-						{/* <IonIcon aria-hidden="true" icon={square} size="small" /> */}
-						<IonImg
-							aria-hidden="true"
-							src={Logo}
-							style={{ height: "25px", paddingBottom: "5px" }}
-						/>
-						<IonLabel style={{ color: "#fff" }}>Pokedex</IonLabel>
-					</IonTabButton>
-				</IonTabBar>
-			</IonTabs>
-		</IonReactRouter>
-	</IonApp>
+    <IonApp>
+        <IonReactRouter>
+            <IonTabs>
+                <IonRouterOutlet placeholder={undefined}>
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/pokemons/:id" component={Detail} />
+                    <Redirect to="/" />
+                </IonRouterOutlet>
+                <IonTabBar slot="bottom">
+                    <IonTabButton tab="allPokemons" href="/">
+                        <IonImg
+                            aria-hidden="true"
+                            src={Logo}
+                            style={{ height: "25px", paddingBottom: "5px" }}
+                        />
+                        <IonLabel style={{ color: "#fff" }}>Pokedex</IonLabel>
+                    </IonTabButton>
+                </IonTabBar>
+            </IonTabs>
+        </IonReactRouter>
+    </IonApp>
 );
 
 export default App;
+
