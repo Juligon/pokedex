@@ -33,6 +33,10 @@ interface PokemonDetail {
 	weight: number;
 }
 
+const capitalizeFirstLetter = (string: string) => {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 const Detail: React.FC<DetailProps> = ({ match, history }) => {
 	const [pokemonDetail, setPokemonDetail] = useState<PokemonDetail | null>(null);
 
@@ -49,7 +53,7 @@ const Detail: React.FC<DetailProps> = ({ match, history }) => {
 					id: data.id,
 					name: data.name,
 					//@ts-ignore
-					images: Object.values(data.sprites).filter(img => typeof img === 'string'),
+					images: Object.values(data.sprites.other["official-artwork"]).filter(img => typeof img === 'string'),
 					type: data.types.map((t: any) => t.type.name),
 					experience: data.base_experience,
 					abilities: data.abilities.map((a: any) => a.ability.name),
@@ -65,10 +69,6 @@ const Detail: React.FC<DetailProps> = ({ match, history }) => {
 
 		fetchPokemonDetail();
 	}, [match.params.id]);
-
-	const capitalizeFirstLetter = (string: string) => {
-		return string.charAt(0).toUpperCase() + string.slice(1);
-	};
 
 	return (
 		<IonPage>
@@ -96,8 +96,8 @@ const Detail: React.FC<DetailProps> = ({ match, history }) => {
 											style={{
 												display: "block",
 												margin: "0 auto",
-												height: "100%",
-												paddingBottom: "50px",
+												width: "250px",
+												paddingBottom: "25px",
 											}}
 										/>
 									</IonItem>
@@ -136,5 +136,5 @@ const Detail: React.FC<DetailProps> = ({ match, history }) => {
 	);
 };
 
-export default withRouter(Detail);
+export default Detail;
 
