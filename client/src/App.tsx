@@ -44,7 +44,7 @@ const App: React.FC = () => (
             <IonTabs>
                 <IonRouterOutlet placeholder={undefined}>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/pokemons/:id" component={Detail} />
+                    <Route exact path="/pokemon/:id" component={Detail} />
                     <Redirect to="/" />
                 </IonRouterOutlet>
                 <IonTabBar slot="bottom">

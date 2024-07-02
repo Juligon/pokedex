@@ -136,7 +136,7 @@ const PokemonList: React.FC<PokemonListProps> = ({ search }) => {
 				<IonRow>
 					{filteredPokemons.map((pokemon) => (
 						<IonCol size="12" size-sm="6" size-md="4" size-lg="3" key={pokemon.id}>
-							<IonRouterLink routerLink={`/pokemons/${pokemon.id}`}>
+							<IonRouterLink routerLink={`/pokemon/${pokemon.id}`}>
 								<IonCard>
 									<img
 										src={pokemon.image}
