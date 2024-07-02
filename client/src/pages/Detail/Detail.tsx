@@ -16,7 +16,7 @@ import {
 	IonCard,
 	IonCardContent,
 } from "@ionic/react";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import "./Detail.css";
 const API_URL = import.meta.env.VITE_API_URL;
 
